@@ -61,6 +61,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
+        Button imageButton = (Button) findViewById(R.id.btn1);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Info.class);
+                startActivity(intent);
+            }
+        });
+
+
         if (!checkLocationServicesStatus()) {
 
             showDialogForLocationServiceSetting();
@@ -86,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 String address = getCurrentAddress(latitude, longitude);
                 textview_address.setText(address);
-
-                Toast.makeText(MainActivity.this, "현재위치 \n위도 " + latitude + "\n경도 " + longitude, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -311,5 +323,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
+
 
 }
