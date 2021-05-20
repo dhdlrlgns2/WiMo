@@ -1,71 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:gravity="center">
 
         <Button
-            android:id="@+id/refreshBtn"
-            android:layout_width="399dp"
+            android:id="@+id/btn_privacy"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="갱신" />
+            android:layout_centerHorizontal="true"
+            android:text="현재위치 저장"
+            />
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:id="@+id/text_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="14dp"
+            android:layout_centerHorizontal="true"
             android:text="현재 시간"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_below="@+id/btn_privacy"
+            />
 
-        <Button
-            android:id="@+id/QR체크인"
-            android:layout_width="401dp"
-            android:layout_height="wrap_content"
-            android:onClick="onButton1Clicked"
-            android:text="QR체크인" />
 
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/text_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_centerHorizontal="true"
+            android:text="현재 위치"
+            android:textSize="18sp"
+            android:layout_below="@+id/text_time"
+            />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview" />
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:text="기록 확인"
+            android:layout_below="@+id/text_location"
+            />
 
         <Button
-            android:id="@+id/btn1"
-
+            android:id="@+id/btn_del_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="화면전환"/>
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:text="기록 삭제"
+            android:layout_below="@+id/btn_list"
+            />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="#FFFFFF">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
-
-    </LinearLayout>
-
-
-
-</LinearLayout>
+</RelativeLayout>
 

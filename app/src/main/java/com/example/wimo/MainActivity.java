@@ -14,19 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,20 +41,33 @@ import java.util.Date;
 import java.util.TimeZone;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     EditText edtName, edtNumber, edtNameResultm, edtNumberResult;
     Button btnInit, btnInsert, btnSelect;
     SQLiteDatabase sqlDB;
 
+    private PrivacyInfoDB privacyInfoDB;
+
     private GpsTracker gpsTracker;
+
+    private Button btnPrivacy;
+    private Button btnList;
+    private Button btnDelList;
+
+    private TextView textLocation;
+    private TextView textTime;
+
+    private RecyclerView recyclerView;
+
+    private List<PrivacyInfo> privacyInfoList = new ArrayList<>();
+
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
 
-    TextView mTextView;
     Button mRefreshBtn;
 
     @Override
@@ -61,56 +75,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Button imageButton = (Button) findViewById(R.id.btn1);
 
-
-
-        Button imageButton = (Button) findViewById(R.id.btn1);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Info.class);
-                startActivity(intent);
-            }
-        });
-
+        privacyInfoDB = new PrivacyInfoDB(this);
 
         if (!checkLocationServicesStatus()) {
-
             showDialogForLocationServiceSetting();
-        }else {
+        } else {
 
             checkRunTimePermission();
         }
 
-        final TextView textview_address = (TextView)findViewById(R.id.textview);
+        btnPrivacy = findViewById(R.id.btn_privacy);
+        btnPrivacy.setOnClickListener(onClickListener);
 
+        btnList = findViewById(R.id.btn_list);
+        btnList.setOnClickListener(onClickListener);
 
-        Button ShowLocationButton = (Button) findViewById(R.id.button);
-        ShowLocationButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View arg0)
-            {
+        btnDelList = findViewById(R.id.btn_del_list);
+        btnDelList.setOnClickListener(onClickListener);
 
-                gpsTracker = new GpsTracker(MainActivity.this);
+        textTime = findViewById(R.id.text_time);
+        textLocation = findViewById(R.id.text_location);
 
-                double latitude = gpsTracker.getLatitude();
-                double longitude = gpsTracker.getLongitude();
-
-                String address = getCurrentAddress(latitude, longitude);
-                textview_address.setText(address);
-            }
-        });
-
-
-        mTextView = (TextView) findViewById(R.id.textView);
-        mRefreshBtn = (Button) findViewById(R.id.refreshBtn);
-        mRefreshBtn.setOnClickListener(this);
-
-
+        recyclerView = findViewById(R.id.recycler_view);
     }
-    private String getTime(){
+
+
+    private String getTime() {
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
         long mNow = System.currentTimeMillis();
         Date mDate = new Date(mNow);
@@ -120,23 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-    public void onButton1Clicked(View view){
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nid.naver.com/login/privacyQR"));
-        startActivity(intent);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.refreshBtn:
-                mTextView.setText(getTime());
-                break;
-            default:
-                break;
-        }
-    }
     /*
      * ActivityCompat.requestPermissions를 사용한 퍼미션 요청의 결과를 리턴받는 메소드입니다.
      */
@@ -145,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                            @NonNull String[] permissions,
                                            @NonNull int[] grandResults) {
 
-        if ( permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
+        if (permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
 
             // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
 
@@ -162,12 +137,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
 
-            if ( check_result ) {
+            if (check_result) {
 
                 //위치 값을 가져올 수 있음
                 ;
-            }
-            else {
+            } else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])
@@ -177,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     finish();
 
 
-                }else {
+                } else {
 
                     Toast.makeText(MainActivity.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
 
@@ -187,7 +161,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    void checkRunTimePermission(){
+    @Override
+    public void onBackPressed() {
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
+        else
+            super.onBackPressed();
+    }
+
+    void checkRunTimePermission() {
 
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
@@ -205,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             // 3.  위치 값을 가져올 수 있음
-
 
 
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
@@ -232,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public String getCurrentAddress( double latitude, double longitude) {
+    public String getCurrentAddress(double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.KOREA);
@@ -256,7 +238,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
             return "주소 미발견";
@@ -264,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Address address = addresses.get(0);
-        return address.getAddressLine(0).toString()+"\n";
+        return address.getAddressLine(0).toString() + "\n";
 
     }
 
@@ -324,6 +305,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
+    private void savePrivacyInfoDB(String location) {
+        PrivacyInfo info = new PrivacyInfo();
+        info.setLocation(location);
+        info.setTime(getTime());
 
+        privacyInfoDB.insertInfoDB(info);
+    }
+
+    private void initRecyclerView() {
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        PrivacyListAdapter adapter = new PrivacyListAdapter(privacyInfoList);
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btn_privacy:
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nid.naver.com/login/privacyQR"));
+                    startActivity(intent);
+
+                    gpsTracker = new GpsTracker(MainActivity.this);
+
+                    double latitude = gpsTracker.getLatitude();
+                    double longitude = gpsTracker.getLongitude();
+
+                    String address = getCurrentAddress(latitude, longitude);
+                    textLocation.setText(address);
+                    textTime.setText(getTime());
+
+                    savePrivacyInfoDB(address);
+                    break;
+
+                case R.id.btn_list:
+                    privacyInfoList = privacyInfoDB.loadInfoDB();
+
+                    if (privacyInfoList.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "저장된 기록이 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        initRecyclerView();
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                    break;
+
+                case R.id.btn_del_list:
+                    privacyInfoDB.clearTable();
+                    Toast.makeText(MainActivity.this, "기록을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
 }
