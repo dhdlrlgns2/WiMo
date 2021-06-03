@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+    android:gravity="center"
+
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+
+        <TextView
+            android:id="@+id/text_time2"
+            android:fontFamily="@font/samsungone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="14dp"
+            android:textColor="@color/font1"
+            android:text="WIMO"
+            android:textSize="80sp" />
+
+        <TextView
+            android:id="@+id/text_time3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/text_time2"
+            android:layout_marginBottom="-230dp"
+            android:text="당신의 위치 모음"
+            android:textColor="@color/font2"
+            android:fontFamily="@font/samsungone"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="400dp"
+            android:layout_marginBottom="14dp"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/samsungone"
+            android:text="현재 시간"
+            android:textColor="@color/font2"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/text_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="현재 위치"
+            android:textColor="@color/font2"
+            android:fontFamily="@font/samsungone"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_below="@+id/text_time"
+            />
+
+        <Button
+            android:id="@+id/btn_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="현재위치 저장"
+
+            android:fontFamily="@font/samsungone"
+            android:layout_marginTop="100dp"
+            android:layout_below="@+id/text_location"
+            app:backgroundTint="@color/pick1"
+            android:textColor="@color/font2"
+            />
+
+
+        <Button
+            android:id="@+id/btn_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@font/samsungone"
+            android:text="Menu"
+            android:textColor="@color/font2"
+            app:backgroundTint="@color/background" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/pick1"
+        android:fontFamily="@font/samsungone"
+        android:visibility="invisible">
+
+    </androidx.recyclerview.widget.RecyclerView>
+    <include layout="@layout/activity_drawer"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:id="@+id/drawer">
+
+    <RelativeLayout
+        android:layout_width="163dp"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/samsungone"
+            android:text="기록 확인"
+            android:textColor="@color/font2"
+            app:backgroundTint="@color/pick1" />
+
+
+        <Button
+            android:id="@+id/btn_del_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/samsungone"
+            android:text="기록 삭제"
+            android:textColor="@color/font2"
+            app:backgroundTint="@color/pick1" />
+
+        <Button
+            android:id="@+id/btn_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_del_list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="전체 위치"
+            android:textColor="@color/font2"
+            app:backgroundTint="@color/pick1" />
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_map"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="메뉴 닫기"
+            android:textColor="@color/font2"
+            app:backgroundTint="@color/pick1" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+
+
+
