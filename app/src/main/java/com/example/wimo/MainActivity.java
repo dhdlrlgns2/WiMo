@@ -10,14 +10,22 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 
@@ -34,7 +42,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,6 +63,17 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPrivacy;
     private Button btnList;
     private Button btnDelList;
+    private Button btnMap; // @Dev 맵이동 버튼
+    private Button btnExport;
+    private Button btnTheme;
+
+    private String themeMode;
+
+    //네비게이션 추가 코드
+    private Toolbar toolbar;//네비게이션 드로어 추가 코드
+    private DrawerLayout drawerLayout;//네비게이션 드로어 추가 코드
+    private NavigationView navigationView;//네비게이션 드로어 추가 코드
+    private FragmentManager fragmentManager = getSupportFragmentManager();//하단 네비게이션 추가 코드
 
     private TextView textLocation;
     private TextView textTime;
@@ -62,18 +82,16 @@ public class MainActivity extends AppCompatActivity {
 
     private List<PrivacyInfo> privacyInfoList = new ArrayList<>();
 
-
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     Button mRefreshBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ex_activity_main);
 
         //Button imageButton = (Button) findViewById(R.id.btn1);
 
@@ -82,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
         } else {
-
             checkRunTimePermission();
         }
-
+        //새로운 레이아웃 적용 위해서 잠시 비활성화
+        /*
         btnPrivacy = findViewById(R.id.btn_privacy);
         btnPrivacy.setOnClickListener(onClickListener);
 
@@ -95,11 +113,85 @@ public class MainActivity extends AppCompatActivity {
         btnDelList = findViewById(R.id.btn_del_list);
         btnDelList.setOnClickListener(onClickListener);
 
+        // @Dev
+        btnMap = findViewById(R.id.btn_map);
+        btnMap.setOnClickListener(onClickListener);
+
+        btnExport = findViewById(R.id.btn_export);
+        btnExport.setOnClickListener(onClickListener);
+
+        themeMode = AppTheme.loadTheme(getApplicationContext());
+        AppTheme.applyTheme(themeMode);
+        btnTheme = findViewById(R.id.btn_theme);
+        btnTheme.setOnClickListener(onClickListener);
+
         textTime = findViewById(R.id.text_time);
         textLocation = findViewById(R.id.text_location);
-
+*/
         recyclerView = findViewById(R.id.recycler_view);
+
+        //하단 네비게이션 추가 코드
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+
+        //네비게이션 드로어 추가 코드
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 왼쪽 상단 버튼 만들기
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu); //왼쪽 상단 버튼 아이콘 지정
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        navigationView = (NavigationView)findViewById(R.id.navigationView);
+        // 네비게이션 드로어 추가 코드
+        /*this.InitializeLayout();
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.item_list:
+                        Toast.makeText(getApplicationContext(), "기록확인 선택", Toast.LENGTH_SHORT).show();
+                    case R.id.item_del_list:
+                        Toast.makeText(getApplicationContext(), "기록삭제 선택", Toast.LENGTH_SHORT).show();
+                    case R.id.item_map:
+                        Toast.makeText(getApplicationContext(), "전체위치 선택", Toast.LENGTH_SHORT).show();
+                    case R.id.item_export:
+                        Toast.makeText(getApplicationContext(), "내보내기 선택", Toast.LENGTH_SHORT).show();
+                    case R.id.item_qr_generator:
+                        Toast.makeText(getApplicationContext(), "개인QR생성 선택", Toast.LENGTH_SHORT).show();
+                    case R.id.item_setting:
+                        Toast.makeText(getApplicationContext(), "설정 선택", Toast.LENGTH_SHORT).show();
+                }
+                drawerLayout = findViewById(R.id.drawerLayout);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });*/
+
     }
+    //네비게이션 드로어 추가 코드
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: { // 왼쪽 상단 버튼 눌렀을 때
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    //네비게이션 드로어 추가 코드
+   /* public void InitializeLayout()
+    {
+        //상단 툴바 설정
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //툴바 메뉴버튼 생성
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu); // 메뉴 버튼 모양 설정
+    }*/
 
 
     private String getTime() {
@@ -136,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
             if (check_result) {
 
                 //위치 값을 가져올 수 있음
@@ -165,9 +256,14 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (recyclerView.getVisibility() == View.VISIBLE) {
             recyclerView.setVisibility(View.INVISIBLE);
-        }
-        else
+        } else
             super.onBackPressed();
+        //네비게이션 드로어 추가 코드
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     void checkRunTimePermission() {
@@ -305,10 +401,12 @@ public class MainActivity extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    private void savePrivacyInfoDB(String location) {
+    private void savePrivacyInfoDB(String location, String latitude, String longitude) {
         PrivacyInfo info = new PrivacyInfo();
         info.setLocation(location);
         info.setTime(getTime());
+        info.setLat(latitude);
+        info.setLon(longitude);
 
         privacyInfoDB.insertInfoDB(info);
     }
@@ -321,6 +419,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    //하단 네비게이션 추가 코드
+    private class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            switch (menuItem.getItemId()) {
+                case R.id.item_home:
+                    Toast.makeText(getApplicationContext(), "홈 선택", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.item_calendar:
+                    Toast.makeText(getApplicationContext(), "캘린더 선택", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.item_qrcode:r:
+                Toast.makeText(getApplicationContext(), "QR코드 선택", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            return true;
+        }
+    }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -336,10 +454,12 @@ public class MainActivity extends AppCompatActivity {
                     double longitude = gpsTracker.getLongitude();
 
                     String address = getCurrentAddress(latitude, longitude);
+
                     textLocation.setText(address);
                     textTime.setText(getTime());
 
-                    savePrivacyInfoDB(address);
+                    // @Dev lat과 lon도  함께 DB에 저장하도록 변경
+                    savePrivacyInfoDB(address, latitude + "", longitude + "");
                     break;
 
                 case R.id.btn_list:
@@ -347,16 +467,28 @@ public class MainActivity extends AppCompatActivity {
 
                     if (privacyInfoList.isEmpty()) {
                         Toast.makeText(MainActivity.this, "저장된 기록이 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        initRecyclerView();
-                        recyclerView.setVisibility(View.VISIBLE);
+                    } else {
+                        // @Dev : 기록확인 버튼을 눌렀을때, 현재 화면에서 History(기록확인) 화면으로 이동합니다.
+                        startActivity(new Intent(MainActivity.this, HistoryActivity.class));
                     }
                     break;
 
                 case R.id.btn_del_list:
                     privacyInfoDB.clearTable();
                     Toast.makeText(MainActivity.this, "기록을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.btn_map:
+                    // @Dev : 전체위치 버튼을 눌렀을때, 현재 화면에서 Map(전체 위치) 화면으로 이동합니다.
+                    startActivity(new Intent(MainActivity.this, MapActivity.class));
+                    break;
+
+                case R.id.btn_export:
+                    startActivity(new Intent(getApplicationContext(), ExportDBDialog.class));
+                    break;
+
+                case R.id.btn_theme:
+                    startActivity(new Intent(getApplicationContext(), AppThemeDialog.class));
                     break;
             }
         }
