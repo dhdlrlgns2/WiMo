@@ -17,8 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".HistoryActivity"></activity>
         <activity android:name=".MapActivity" />
-        <activity android:name=".MainActivity"
-            android:theme="@style/Theme.Design.NoActionBar">//네비게이션 드로어 추가 코드
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

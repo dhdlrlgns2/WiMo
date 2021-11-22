@@ -12,20 +12,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 
@@ -41,9 +34,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,12 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String themeMode;
 
-    //네비게이션 추가 코드
-    private Toolbar toolbar;//네비게이션 드로어 추가 코드
-    private DrawerLayout drawerLayout;//네비게이션 드로어 추가 코드
-    private NavigationView navigationView;//네비게이션 드로어 추가 코드
-    private FragmentManager fragmentManager = getSupportFragmentManager();//하단 네비게이션 추가 코드
-
     private TextView textLocation;
     private TextView textTime;
 
@@ -91,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ex_activity_main);
+        setContentView(R.layout.activity_main);
 
         //Button imageButton = (Button) findViewById(R.id.btn1);
 
@@ -102,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkRunTimePermission();
         }
-        //새로운 레이아웃 적용 위해서 잠시 비활성화
-        /*
+
         btnPrivacy = findViewById(R.id.btn_privacy);
         btnPrivacy.setOnClickListener(onClickListener);
 
@@ -127,72 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
         textTime = findViewById(R.id.text_time);
         textLocation = findViewById(R.id.text_location);
-*/
+
         recyclerView = findViewById(R.id.recycler_view);
-
-        //하단 네비게이션 추가 코드
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
-
-        //네비게이션 드로어 추가 코드
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 왼쪽 상단 버튼 만들기
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu); //왼쪽 상단 버튼 아이콘 지정
-
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
-        navigationView = (NavigationView)findViewById(R.id.navigationView);
-        // 네비게이션 드로어 추가 코드
-        /*this.InitializeLayout();
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId())
-                {
-                    case R.id.item_list:
-                        Toast.makeText(getApplicationContext(), "기록확인 선택", Toast.LENGTH_SHORT).show();
-                    case R.id.item_del_list:
-                        Toast.makeText(getApplicationContext(), "기록삭제 선택", Toast.LENGTH_SHORT).show();
-                    case R.id.item_map:
-                        Toast.makeText(getApplicationContext(), "전체위치 선택", Toast.LENGTH_SHORT).show();
-                    case R.id.item_export:
-                        Toast.makeText(getApplicationContext(), "내보내기 선택", Toast.LENGTH_SHORT).show();
-                    case R.id.item_qr_generator:
-                        Toast.makeText(getApplicationContext(), "개인QR생성 선택", Toast.LENGTH_SHORT).show();
-                    case R.id.item_setting:
-                        Toast.makeText(getApplicationContext(), "설정 선택", Toast.LENGTH_SHORT).show();
-                }
-                drawerLayout = findViewById(R.id.drawerLayout);
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });*/
-
     }
-    //네비게이션 드로어 추가 코드
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: { // 왼쪽 상단 버튼 눌렀을 때
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    //네비게이션 드로어 추가 코드
-   /* public void InitializeLayout()
-    {
-        //상단 툴바 설정
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //툴바 메뉴버튼 생성
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu); // 메뉴 버튼 모양 설정
-    }*/
-
 
     private String getTime() {
         SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
@@ -258,12 +178,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.INVISIBLE);
         } else
             super.onBackPressed();
-        //네비게이션 드로어 추가 코드
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     void checkRunTimePermission() {
@@ -419,26 +333,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    //하단 네비게이션 추가 코드
-    private class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            switch (menuItem.getItemId()) {
-                case R.id.item_home:
-                    Toast.makeText(getApplicationContext(), "홈 선택", Toast.LENGTH_SHORT).show();
-                    break;
-
-                case R.id.item_calendar:
-                    Toast.makeText(getApplicationContext(), "캘린더 선택", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.item_qrcode:r:
-                Toast.makeText(getApplicationContext(), "QR코드 선택", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            return true;
-        }
-    }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -484,10 +378,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.btn_export:
+                    // 내보내기 버튼 클릭시, 다이얼로그 팝업 *추후 삭제 예정*
                     startActivity(new Intent(getApplicationContext(), ExportDBDialog.class));
                     break;
 
                 case R.id.btn_theme:
+                    // 화면테마 버튼 클릭시, 다이얼로그 팝업 *추후 삭제 예정*
                     startActivity(new Intent(getApplicationContext(), AppThemeDialog.class));
                     break;
             }
