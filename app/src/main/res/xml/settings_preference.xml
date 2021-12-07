@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="설정">
+        <PreferenceScreen
+            android:key="alert_screen"
+            android:title="확진자 방문 장소 일치 알림"
+            android:summary="사용함"
+            android:icon="@drawable/ic_alert">
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="alert"
+                android:summary="확진자 방문 장소와 사용자의 방문 장소가 일치하는 경우에 알림을 주는 기능입니다."
+                android:title="알림"
+                android:icon="@drawable/ic_notify"/>
+            <ListPreference
+                android:entries="@array/array_area"
+                android:entryValues="@array/array_area"
+                android:key="alert_area_list"
+                android:summary="서울"
+                android:title="지역"
+                android:dependency="alert"
+                android:defaultValue="서울"
+                android:icon="@drawable/ic_area"/>
+        </PreferenceScreen>
+  <!--  </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/custom">-->
+        <ListPreference
+            android:entries="@array/array_export"
+            android:entryValues="@array/array_export"
+            android:key="export_list"
+            android:summary="CSV"
+            android:title="내보내기 파일 유형"
+            android:defaultValue="CSV"
+            android:icon="@drawable/ic_export"/>
+   <!-- </PreferenceCategory>-->
+        <ListPreference
+            android:entries="@array/array_theme"
+            android:entryValues="@array/array_theme"
+            android:key="theme_list"
+            android:summary="Light"
+            android:title="앱 화면 테마"
+            android:defaultValue="Light"
+            android:icon="@drawable/ic_theme"/>
+        <!--설정창 커스텀 레이아웃 코드
+        <Preference android:layout="@layout/custom"/>-->
+    </PreferenceCategory>
+</PreferenceScreen>

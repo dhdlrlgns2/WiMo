@@ -2,10 +2,20 @@ package com.example.wimo;
 
 public class PrivacyInfo {
 
+    private int id;
     private String location;
     private String time;
-    private String lat;  // @Dev 위도
-    private String lon;   // @Dev 경도
+    private String lat;
+    private String lon;
+    private String memo;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setLocation(String location) {
         this.location = location;
@@ -23,10 +33,6 @@ public class PrivacyInfo {
         return time;
     }
 
-
-    /** @Dev
-     *  lat, lon의 getter,setter 추가
-     */
     public String getLat() {
         return lat;
     }
@@ -41,5 +47,13 @@ public class PrivacyInfo {
 
     public void setLon(String lon) {
         this.lon = lon;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

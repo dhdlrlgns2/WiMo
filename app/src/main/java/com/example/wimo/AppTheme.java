@@ -8,15 +8,14 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 
 /*
-* 화면테마 동작관련 코드
-* */
+ * 화면테마 동작관련 코드
+ * */
 
 public class AppTheme {
     private static final String TAG = "AppTheme";
     public static final String LIGHT_MODE = "light";
     public static final String DARK_MODE = "dark";
     public static final String DEFAULT_MODE = "default";
-
 
     // 화면테마에서 라이트, 다크 눌렀을 경우 동작하는 코드
     public static void applyTheme(String themeMode) {

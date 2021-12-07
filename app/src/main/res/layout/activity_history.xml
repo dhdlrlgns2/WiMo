@@ -7,32 +7,15 @@
     android:orientation="vertical"
     tools:context=".HistoryActivity">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <AutoCompleteTextView
-            android:id="@+id/edt_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:textSize="13dp"
-            android:completionThreshold="1"/>
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:text="검색"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fragment_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    </LinearLayout>
-
+        app:menu="@menu/menu_history"/>
 </LinearLayout>

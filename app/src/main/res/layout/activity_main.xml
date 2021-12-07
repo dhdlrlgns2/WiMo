@@ -93,24 +93,45 @@
             app:backgroundTint="@color/pick2" />
 
         <Button
-            android:id="@+id/btn_export"
+            android:id="@+id/btn_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_map"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:backgroundTint="@color/pick2"
-            android:text="내보내기" />
+            android:text="재난 문자"
+            app:backgroundTint="@color/pick2" />
 
         <Button
-            android:id="@+id/btn_theme"
+            android:id="@+id/btn_host"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_export"
+            android:layout_below="@+id/btn_message"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="QR 정보"
+            app:backgroundTint="@color/pick2" />
+
+        <Button
+            android:id="@+id/btn_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_host"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/pick2"
-            android:text="화면모드" />
+            android:onClick="DialogClick"
+            android:text="내보내기" />
+
+        <Button
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_dialog"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/pick2"
+            android:text="설정" />
 
     </RelativeLayout>
 

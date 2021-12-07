@@ -2,9 +2,11 @@ package com.example.wimo;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
@@ -17,8 +19,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /*
-* DB 내보내기 동작관련 코드
-* */
+ * DB 내보내기 동작관련 코드
+ * */
 
 public class ExportDB {
     private final PrivacyInfoDB.PrivacyInfoDBHelper dbHelper;

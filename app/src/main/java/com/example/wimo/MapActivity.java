@@ -10,7 +10,6 @@ import com.example.wimo.Map.TMap;
 import java.util.ArrayList;
 
 public class MapActivity extends AppCompatActivity {
-    private PrivacyInfoDB privacyInfoDB;
     private LinearLayout linearLayoutTmap;
 
     @Override
@@ -20,10 +19,7 @@ public class MapActivity extends AppCompatActivity {
 
         linearLayoutTmap = findViewById(R.id.linearLayoutTmap);
 
-        // SQLite DB Load
-        privacyInfoDB = new PrivacyInfoDB(this);
-
-        ArrayList<PrivacyInfo> privacyInfos = privacyInfoDB.loadInfoDB();
+        ArrayList<PrivacyInfo> privacyInfos = PrivacyInfoDB.getInstance().loadInfoDB();
 
         final TMap tMap = new TMap(getApplicationContext(), linearLayoutTmap);
 
